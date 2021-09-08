@@ -19,7 +19,7 @@ def load_user(id):
 app.config['SECRET_KEY'] = os.environ.get('SECRET')
 serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://ywrhztcgyxonjq:4fc3b8bff68944225f9c337fe4878d2af98803bd020c2e9ec15710ef38d5c051@ec2-54-211-160-34.compute-1.amazonaws.com:5432/d117o9pe0b26u0'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 DATABASE_URL = os.environ['DATABASE_URL']
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
