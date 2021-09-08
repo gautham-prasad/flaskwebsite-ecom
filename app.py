@@ -2,6 +2,7 @@ import os
 import psycopg2
 from flask import Flask, jsonify, request, url_for
 from flask_mail import Mail, Message
+from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, current_user, logout_user
 from itsdangerous.exc import BadTimeSignature, SignatureExpired
 from werkzeug.security import generate_password_hash, check_password_hash
