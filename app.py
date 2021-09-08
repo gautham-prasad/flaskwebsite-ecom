@@ -6,7 +6,7 @@ from flask_login import LoginManager, login_user, current_user, logout_user
 from itsdangerous.exc import BadTimeSignature, SignatureExpired
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
-from models import *                             
+from models import tempusers, users, usersinfo                             
 
 app = Flask(__name__)
 
