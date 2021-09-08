@@ -20,7 +20,8 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET')
 serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
-conn = psycopg2.connect(app.config['SQLALCHEMY'], sslmode='require')
+DATABASE_URL = os.environ['DATABASE_URL']
+conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
 db = SQLAlchemy(app)
 
