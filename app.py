@@ -64,7 +64,7 @@ def register():
         db.session.commit()
 
         msg = "Please verify email to complete registration"
-        return jsonify({'msg': msg, 'username': username, 'email': email, 'password': password, 'uuid':token})
+        return jsonify({'msg': msg, 'username': username, 'email': email, 'password': password, 'token':token})
 
     elif request.json == 'POST':
         msg = 'Please fill out the form!'
@@ -75,7 +75,7 @@ def register():
 @app.route("/verify/<token>", methods=['GET'])
 def verify(token):
     try:
-        email = serializer.loads(token,max_age=60)
+        email = serializer.loads(token,max_age=300)
 
     except SignatureExpired:
         msg = 'Token expired!'
