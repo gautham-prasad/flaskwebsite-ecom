@@ -82,7 +82,7 @@ def verify(token):
         return jsonify({'msg': msg})
         
     except BadTimeSignature:
-        msg = 'Token timed out!'
+        msg = 'Token seems incorrect!'
         return jsonify({'msg': msg})
     
     tempuser = tempusers.query.filter_by(email=email).first()
