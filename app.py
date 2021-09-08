@@ -19,7 +19,7 @@ app.config['SECRET_KEY'] = 'secret'
 # os.environ.get('SECRET')
 serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://mmfxgxyvvqhulu:8aeaf8e8265a39c7fa812f9f9950d46812c384bb4a481b64e647325b6eb9c2de@ec2-54-156-60-12.compute-1.amazonaws.com:5432/de40f3aaq2g93o'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://elnecssdgxlmeq:e61ae5de5b85d3f96145686a8229ea7ac0607e8d79d6bf4a2e79a1f1c56df84d@ec2-18-235-45-217.compute-1.amazonaws.com:5432/d57qqes3ocomh0'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://elnecssdgxlmeq:e61ae5de5b85d3f96145686a8229ea7ac0607e8d79d6bf4a2e79a1f1c56df84d@ec2-18-235-45-217.compute-1.amazonaws.com:5432/d57qqes3ocomh0'
 db = SQLAlchemy(app)
 
 sender_email = 'gauthampg1203@gmail.com'
