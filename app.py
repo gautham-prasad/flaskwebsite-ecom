@@ -75,7 +75,7 @@ def register():
 @app.route("/verify/<token>", methods=['GET'])
 def verify(token):
     try:
-        email = serializer.loads(token,max_age=300)
+        email = serializer.loads(token,max_age=120)
 
     except SignatureExpired:
         msg = 'Token expired!'
