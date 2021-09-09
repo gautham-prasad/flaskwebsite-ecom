@@ -32,6 +32,34 @@ app.config['MAIL_USERNAME'] = os.environ.get('SENDER_EMAIL')
 app.config['MAIL_PASSWORD'] = os.environ.get('SENDER_PASSWORD')
 mail = Mail(app)
 
+@app.route("/", methods=['GET','POST'])
+def login():
+
+    if request.method == 'POST' and 'username' in request.json and 'password' in request.json:
+        user_name = users.query.filter_by(username=request.json['username']).first()
+
+        if user_name:
+            user_password = usersinfo.query.filter_by(email=user_name.email).first()
+            user_password = check_password_hash(user_password.password,request.json['password'])
+
+            if user_password:
+                login_user(user_name)
+                msg = 'Welcome back, %s' % user_name.username
+                return jsonify({'msg': msg})
+
+            msg = 'Invalid username or password'
+            return jsonify({'msg': msg})
+
+        msg = 'Invalid username or password'
+        return jsonify({'msg': msg})
+
+    elif request.json == 'POST': 
+        msg = 'Please fill out the form!'
+        return jsonify({'msg': msg})
+
+    msg = 'Redirect to login page'
+    return jsonify({'msg': msg})
+
 @app.route("/register", methods=['GET', 'POST'])
 def register():
 
@@ -95,34 +123,6 @@ def verify(token):
 
     msg = 'Congratulations, registration successful! Redirect to login page'
     return jsonify({'msg': msg, 'email':email})
-
-@app.route("/", methods=['GET','POST'])
-def login():
-
-    if request.method == 'POST' and 'username' in request.json and 'password' in request.json:
-        user_name = users.query.filter_by(username=request.json['username']).first()
-
-        if user_name:
-            user_password = usersinfo.query.filter_by(email=user_name.email).first()
-            user_password = check_password_hash(user_password.password,request.json['password'])
-
-            if user_password:
-                login_user(user_name)
-                msg = 'Welcome back, %s' % user_name.username
-                return jsonify({'msg': msg})
-
-            msg = 'Invalid username or password'
-            return jsonify({'msg': msg})
-
-        msg = 'Invalid username or password'
-        return jsonify({'msg': msg})
-
-    elif request.json == 'POST': 
-        msg = 'Please fill out the form!'
-        return jsonify({'msg': msg})
-
-    msg = 'Redirect to login page'
-    return jsonify({'msg': msg})
 
 @app.route("/logout")
 def logout():
