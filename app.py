@@ -107,7 +107,7 @@ def login():
             user_password = check_password_hash(user_password.password,request.json['password'])
 
             if user_password:
-                login_user(user_name)
+                login_user(user_name.username)
                 msg = 'Welcome back, %s' % user_name.username
                 return jsonify({'msg': msg})
 
