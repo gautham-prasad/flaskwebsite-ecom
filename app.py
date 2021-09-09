@@ -20,18 +20,16 @@ def load_user(id):
 app.config['SECRET_KEY'] = os.environ.get('SECRET')
 serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
-DATABASE_URL = 'postgresql://ywrhztcgyxonjq:4fc3b8bff68944225f9c337fe4878d2af98803bd020c2e9ec15710ef38d5c051@ec2-54-211-160-34.compute-1.amazonaws.com:5432/d117o9pe0b26u0'
+DATABASE_URL = os.environ.get('DATBASE_URI')
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-
 db = SQLAlchemy(app)
 
-sender_email = 'gauthampg1203@gmail.com'
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_USERNAME'] = sender_email
-app.config['MAIL_PASSWORD'] = 'quwqaoleljpvqitr'
+app.config['MAIL_USERNAME'] = os.environ.get('SENDER_EMAIL')
+app.config['MAIL_PASSWORD'] = os.environ.get('SENDER_PASSWORD')
 mail = Mail(app)
 
 @app.route("/register", methods=['GET', 'POST'])
