@@ -2,7 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 db = SQLAlchemy()
 
-class tempusers(db.Model):
+class tempusers(UserMixin, db.Model):
 
         __tablename__ = "tempusers"
 
