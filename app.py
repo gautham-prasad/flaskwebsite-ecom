@@ -25,10 +25,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 db = SQLAlchemy(app)
 
+sender_email = os.environ.get('SENDER_EMAIL')
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_USERNAME'] = os.environ.get('SENDER_EMAIL')
+app.config['MAIL_USERNAME'] = sender_email
 app.config['MAIL_PASSWORD'] = os.environ.get('SENDER_PASSWORD')
 mail = Mail(app)
 
