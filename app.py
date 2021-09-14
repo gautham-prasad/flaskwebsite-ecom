@@ -4,12 +4,13 @@ from models import tempusers, users, usersinfo
 from flask import Flask, jsonify, request, url_for
 from flask_mail import Mail, Message
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 from itsdangerous.exc import BadTimeSignature, SignatureExpired
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 
 app = Flask(__name__)
-
+CORS(app)
 
 app.config['SECRET_KEY'] = os.environ.get('SECRET')
 serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
