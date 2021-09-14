@@ -68,17 +68,17 @@ def register():
 
 @app.route("/verify/<token>", methods=['GET','POST'])
 def verify(token):
-    try:
-        email = serializer.loads(token,max_age=120)
 
-    except SignatureExpired:
+    if SignatureExpired:
         msg = 'Token expired!'
         return jsonify({'msg': msg})
         
-    except BadTimeSignature:
+    elif BadTimeSignature:
         msg = 'Token seems incorrect!'
         return jsonify({'msg': msg})
     
+    email = serializer.loads(token,max_age=120)
+   
     tempuser = tempusers.query.filter_by(email=email).first()
 
     user = users(email = email, username = tempuser.username)
@@ -118,32 +118,6 @@ def login():
         return jsonify({'msg': msg})
 
     msg = 'Redirect to login page'
-    return jsonify({'msg': msg})
-
-@app.route("/logout")
-def logout():
-    logout_user()
-    msg = 'Logged out!'
-    return jsonify({'msg': msg})
-
-@app.route('/dashboard', methods=['GET', 'POST'])
-def dashboard():
-
-    if not current_user.is_authenticated:
-        msg = 'redirect to login page'
-        return jsonify({'msg': msg})
-
-    msg = 'Welcome to dashboard.'
-    return jsonify({'msg': msg})
-
-@app.route('/profile', methods=['GET', 'POST'])
-def profile():
-
-    if not current_user.is_authenticated:
-        msg = 'redirect to login page'
-        return jsonify({'msg': msg})
-
-    msg = 'Welcome to profile.'
     return jsonify({'msg': msg})
 
 if __name__ == '__main__':
