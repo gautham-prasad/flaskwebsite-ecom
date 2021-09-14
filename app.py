@@ -4,18 +4,12 @@ from models import tempusers, users, usersinfo
 from flask import Flask, jsonify, request, url_for
 from flask_mail import Mail, Message
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, login_user, current_user, logout_user
 from itsdangerous.exc import BadTimeSignature, SignatureExpired
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 
 app = Flask(__name__)
 
-login_manager = LoginManager(app)
-
-# @login_manager.user_loader
-# def load_user(id):
-#     return users.query.get(int(id))
 
 app.config['SECRET_KEY'] = os.environ.get('SECRET')
 serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
@@ -109,7 +103,6 @@ def login():
             user_password = check_password_hash(user_password.password,request.json['password'])
 
             if user_password:
-                login_user(user_name.username)
                 msg = 'Welcome back, %s' % user_name.username
                 return jsonify({'msg': msg})
 
