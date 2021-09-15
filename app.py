@@ -70,16 +70,8 @@ def register():
 
 @app.route("/verify/<token>", methods=['GET','POST'])
 def verify(token):
-    try:
-        email = serializer.loads(token,max_age=300)
 
-    except SignatureExpired:
-        msg = 'Token expired!'
-        return jsonify({'msg': msg})
-        
-    except BadTimeSignature:
-        msg = 'Token seems incorrect!'
-        return jsonify({'msg': msg})
+    email = serializer.loads(token)
    
     tempuser = tempusers.query.filter_by(email=email).first()
 
