@@ -5,7 +5,8 @@ from flask_mail import Mail, Message
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
-from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadTimeSignature
+from itsdangerous import URLSafeTimedSerializer
+from itsdangerous.exc import BadTimeSignature, SignatureExpired
 from models import tempusers, users, usersinfo                             
 
 
@@ -51,11 +52,12 @@ def register():
         link = url_for('verify',token=token,_external=True)
         msg = Message('Verification link',sender=('Gautham','sender_email'),recipients=[email, sender_email])
         msg.body = 'Congratulations! Your link is {}'.format(link)
-        mail.send(msg)
         
         tempuser = tempusers(email = email, username =username, password = password)
         db.session.add(tempuser)
         db.session.commit()
+
+        mail.send(msg)
 
         msg = "Please verify email to complete registration"
         return jsonify({'msg': msg, 'username': username, 'email': email, 'password': password, 'token':token})
@@ -96,15 +98,15 @@ def verify(token):
 @app.route("/", methods=['GET','POST'])
 def login():
 
-    if request.method == 'POST' and 'username' in request.json and 'password' in request.json:
-        user_name = users.query.filter_by(username=request.json['username']).first()
+    if request.method == 'POST' and 'email' in request.json and 'password' in request.json:
+        user_email = users.query.filter_by(email=request.json['email']).first()
 
-        if user_name:
-            user_password = usersinfo.query.filter_by(email=user_name.email).first()
+        if user_email:
+            user_password = usersinfo.query.filter_by(id=user_email.id).first()
             user_password = check_password_hash(user_password.password,request.json['password'])
 
             if user_password:
-                msg = 'Welcome back, %s' % user_name.username
+                msg = 'Welcome back, %s' % user_email.username
                 return jsonify({'msg': msg})
 
             msg = 'Invalid username or password'
