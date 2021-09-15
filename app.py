@@ -72,20 +72,29 @@ def register():
 def verify(token):
 
     email = serializer.loads(token)
-   
     tempuser = tempusers.query.filter_by(email=email).first()
 
-    user = users(email = email, username = tempuser.username)
-    db.session.add(user)
-    db.session.commit()
+    try:
+        if tempuser.email == email:
 
-    userinfo = usersinfo(email = email, password = tempuser.password)
-    db.session.add(userinfo)
-    db.session.commit()
+            user = users(email = email, username = tempuser.username)
+            db.session.add(user)
+            db.session.commit()
 
-    msg = 'Congratulations, registration successful! Redirect to login page'
-    return jsonify({'msg': msg, 'email':email})
+            userinfo = usersinfo(email = email, password = tempuser.password)
+            db.session.add(userinfo)
+            db.session.commit()
 
+            msg = 'Congratulations, registration successful! Redirect to login page'
+            return jsonify({'msg': msg, 'email':email})
+
+    except BadTimeSignature:
+        msg = 'Inavlid token!'
+        return jsonify({'msg': msg, 'email':email})
+        
+    except SignatureExpired:
+        msg = 'Token expired!'
+        return jsonify({'msg': msg, 'email':email})
 
 @app.route("/", methods=['GET','POST'])
 def login():

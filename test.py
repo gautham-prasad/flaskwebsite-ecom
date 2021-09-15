@@ -1,27 +1,18 @@
-def bsearch(list, val):
-   list_size = len(list) - 1
-   idx0 = 0
-   idxn = list_size
-# Find the middle most value
-   while idx0 <= idxn:
-      midval = (idx0 + idxn)// 2
-      if list[midval] == val:
-         return ("1")
-# Compare the value the middle most value
-   if val > list[midval]:
-      idx0 = midval + 1
-      return ("2")
+from flask import Flask
+from itsdangerous import URLSafeSerializer
 
-   else:
-      idxn = midval - 1
-      return ("3")
+app = Flask(__name__)
+app.config['SECRET_KEY'] = "secretKey"
 
-   if idx0 > idxn:
-      return None
-# Initialize the sorted list
-list = [2,7,19,34,53,72]
+serializer = URLSafeSerializer(app.config['SECRET_KEY'])
+email = 'test'
+token = serializer.dumps(email)
+print(token)
+# eyJpZCI6NSwibmFtZSI6Iml0c2Rhbmdlcm91cyJ9.6YP6T0BaO67XP--9UzTrmurXSmg
 
-# Print the search result
-print(bsearch(list,72))
-print(bsearch(list,11))
+data = serializer.loads(token)
+print(data)
+# itsdangerous
 
+if __name__ == '__main__':
+    app.run()
