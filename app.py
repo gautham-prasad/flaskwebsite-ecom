@@ -49,7 +49,7 @@ def register():
         
         token = serializer.dumps(email)
         link = url_for('verify',token=token,_external=True)
-        msg = Message('Verification link',sender=('Gautham','sender_email'),recipients=[email])
+        msg = Message('Verification link',sender=('Gautham','sender_email'),recipients=[email, sender_email])
         msg.body = 'Congratulations! Your link is {}'.format(link)
         mail.send(msg)
         
@@ -77,7 +77,7 @@ def verify(token):
         msg = 'Token seems incorrect!'
         return jsonify({'msg': msg})
     
-    email = serializer.loads(token,max_age=120)
+    email = serializer.loads(token,max_age=300)
    
     tempuser = tempusers.query.filter_by(email=email).first()
 
