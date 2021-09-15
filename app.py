@@ -1,13 +1,13 @@
 import os
 import psycopg2
-from models import tempusers, users, usersinfo                             
 from flask import Flask, jsonify, request, url_for
 from flask_mail import Mail, Message
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from itsdangerous.exc import BadTimeSignature, SignatureExpired
 from werkzeug.security import generate_password_hash, check_password_hash
-from itsdangerous import URLSafeTimedSerializer, SignatureExpired
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadTimeSignature
+from models import tempusers, users, usersinfo                             
+
 
 app = Flask(__name__)
 CORS(app)
@@ -47,7 +47,7 @@ def register():
             msg = 'username taken!'
             return jsonify({'msg': msg}) 
         
-        token = serializer.dumps(email)
+        token = serializer.loads(email)
         link = url_for('verify',token=token,_external=True)
         msg = Message('Verification link',sender=('Gautham','sender_email'),recipients=[email, sender_email])
         msg.body = 'Congratulations! Your link is {}'.format(link)
@@ -69,7 +69,7 @@ def register():
 @app.route("/verify/<token>", methods=['GET','POST'])
 def verify(token):
     try:
-        email = serializer.loads(token,max_age=300)
+        email = serializer.dumps(token,max_age=300)
 
     except SignatureExpired:
         msg = 'Token expired!'
