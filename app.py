@@ -91,7 +91,7 @@ def verify(token):
     except BadTimeSignature:
         msg = 'Inavlid token!'
         return jsonify({'msg': msg, 'email':email})
-        
+
     except SignatureExpired:
         msg = 'Token expired!'
         return jsonify({'msg': msg, 'email':email})
