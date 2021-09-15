@@ -68,14 +68,14 @@ def register():
 
 @app.route("/verify/<token>", methods=['GET','POST'])
 def verify(token):
-    
-    email = serializer.loads(token,max_age=300)
+    try:
+        email = serializer.loads(token,max_age=300)
 
-    if SignatureExpired:
+    except SignatureExpired:
         msg = 'Token expired!'
         return jsonify({'msg': msg})
         
-    elif BadTimeSignature:
+    except BadTimeSignature:
         msg = 'Token seems incorrect!'
         return jsonify({'msg': msg})
    
