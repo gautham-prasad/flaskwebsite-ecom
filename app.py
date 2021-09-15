@@ -47,7 +47,7 @@ def register():
             msg = 'username taken!'
             return jsonify({'msg': msg}) 
         
-        token = serializer.loads(email)
+        token = serializer.dumps(email)
         link = url_for('verify',token=token,_external=True)
         msg = Message('Verification link',sender=('Gautham','sender_email'),recipients=[email, sender_email])
         msg.body = 'Congratulations! Your link is {}'.format(link)
@@ -69,7 +69,7 @@ def register():
 @app.route("/verify/<token>", methods=['GET','POST'])
 def verify(token):
     try:
-        email = serializer.dumps(token,max_age=300)
+        email = serializer.loads(token,max_age=300)
 
     except SignatureExpired:
         msg = 'Token expired!'
