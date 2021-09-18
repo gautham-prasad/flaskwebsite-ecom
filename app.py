@@ -129,7 +129,7 @@ def login():
             msg = 'Invalid email or password'
             return jsonify({'msg': msg}), 401
 
-        elif user.email == email:
+        elif email == user.email:
             userinfo = usersinfo.query.filter_by(email=email).first()
             user_password = check_password_hash(userinfo.password,password)
 
