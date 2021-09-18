@@ -79,8 +79,9 @@ def register():
 
 @app.route("/verify/<token>", methods=['GET', 'POST'])
 def verify(token):
+    email = serializer.loads(token)
+    
     try:
-        email = serializer.loads(token)
         user_email = tempusers.query.filter_by(email= email).first()
         if email == user_email.email:
 
