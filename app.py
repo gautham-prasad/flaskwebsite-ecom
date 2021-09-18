@@ -95,11 +95,11 @@ def verify(token):
     
     except BadTimeSignature:
         msg = 'Invalid token!'
-        return jsonify({'msg':msg})
+        return jsonify({'msg':msg}), 403
 
     except SignatureExpired:
         msg = 'Token expired!'
-        return jsonify({'msg':msg})
+        return jsonify({'msg':msg}), 403
 
     if email == user_email.email:
 
@@ -114,7 +114,7 @@ def verify(token):
             msg = 'Registration successful!'
             return jsonify({'msg':msg, 'email': email})
 
-    return jsonify({'msg': "invalid_token"})
+    return jsonify({'msg': "invalid_token"}), 403
     
 
 @app.route("/login", methods=['GET','POST'])
