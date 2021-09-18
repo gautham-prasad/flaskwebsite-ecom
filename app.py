@@ -89,7 +89,7 @@ def register():
 
     return jsonify({'msg': "redirect to register page"}), 301
 
-@app.route("/verify/<token>", methods=['GET', 'POST'])
+@app.route("/verify/<token>", methods=['GET'])
 def verify(token):
     email = serializer.loads(token)
     
@@ -117,6 +117,9 @@ def verify(token):
     except SignatureExpired:
         msg = 'Token expired!'
         return jsonify({'msg':msg})
+        
+    except:
+            return jsonify({'msg': "redirect to login page"})
     
 
 @app.route("/login", methods=['GET','POST'])
