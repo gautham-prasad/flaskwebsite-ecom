@@ -1,3 +1,4 @@
+from _typeshed import NoneType
 import os, psycopg2
 import re
 from flask import Flask, jsonify, request, url_for
@@ -125,7 +126,7 @@ def login():
 
         user = users.query.filter_by(email=email).first()
 
-        if email is None:
+        if email is NoneType:
             msg = 'Invalid email or password'
             return jsonify({'msg': msg}), 401
 
