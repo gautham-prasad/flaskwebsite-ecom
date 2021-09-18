@@ -122,13 +122,16 @@ def verify(token):
 def login():
 
     if request.method == 'POST' and 'email' in request.json and 'password' in request.json:
-        user = users.query.filter_by(email=request.json['email']).first()
+        email = request.json['email']
+        password = request.json['password']
 
-        if user:
-            userinfo = usersinfo.query.filter_by(email=user.email).first()
-            user_password = check_password_hash(userinfo.password,request.json['password'])
+        user = users.query.filter_by(email=email).first()
 
-            if user_password:
+        if email == user.email:
+            userinfo = usersinfo.query.filter_by(email=email).first()
+            user_password = check_password_hash(userinfo.password,password)
+
+            if user_password == userinfo.password:
                 login_user(user.username)
                 msg = 'Welcome back, %s' % user.username
                 return jsonify({'msg': msg}), 200
