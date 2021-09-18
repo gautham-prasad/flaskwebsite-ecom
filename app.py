@@ -77,29 +77,28 @@ def register():
         mail.send(msg)
 
         msg = "Please verify email to complete registration"
-        return jsonify({'msg': msg, 'username': username, 'email': email, 'password': password, 'token':token}), 200
+        return jsonify({'msg': msg, 'username': username, 'email': email, 'password': password, 'token':token})
 
     elif request.json == 'POST':
         msg = 'Please fill out the form!'
         return jsonify({'msg': msg}), 401
 
-    return jsonify({'msg': "redirect to register page"}), 301
+    return jsonify({'msg': "redirect to register page"}), 302
 
 @app.route("/verify/<token>", methods=['GET'])
 def verify(token):
-
     
     try:
         email = serializer.loads(token, max_age = 120)
         user_email = tempusers.query.filter_by(email= email).first()
     
     except SignatureExpired:
-        msg = 'Token expired!'
+        msg = 'Token Timed Out!'
         return jsonify({'msg':msg}), 401
 
     except BadTimeSignature:
-        msg = 'Token invalid!'
-        return jsonify({'msg':msg}), 403
+        msg = 'Invalid Token!'
+        return jsonify({'msg':msg}), 401
 
     if email == user_email.email:
 
@@ -112,9 +111,9 @@ def verify(token):
             db.session.commit()
 
             msg = 'Registration successful!'
-            return jsonify({'msg':msg, 'email': email})
+            return jsonify({'msg':msg, 'email': email, 'redirect':'registration page'})
 
-    return jsonify({'msg': "invalid_token"}), 403
+    return jsonify({'msg': "redirect to registration page "}), 302
     
 
 @app.route("/login", methods=['GET','POST'])
@@ -132,7 +131,7 @@ def login():
 
             if user_password:
                 msg = 'Welcome back, %s' % user.username
-                return jsonify({'msg': msg}), 200
+                return jsonify({'msg': msg})
 
             msg = 'Invalid email or password'
             return jsonify({'msg': msg}), 401
@@ -145,7 +144,7 @@ def login():
         return jsonify({'msg': msg}), 401
 
     msg = 'Redirect to login page'
-    return jsonify({'msg': msg}), 301
+    return jsonify({'msg': msg}), 302
 
 @app.route("/logout")
 @login_required
