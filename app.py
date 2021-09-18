@@ -121,7 +121,6 @@ def login():
             user_password = check_password_hash(userinfo.password,password)
 
             if user_password:
-
                 msg = 'Welcome back, %s' % user.username
                 return jsonify({'msg': msg}), 200
 
