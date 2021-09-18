@@ -124,8 +124,9 @@ def login():
         password = request.json['password']
 
         user = users.query.filter_by(email=email).first()
+        user_email = user.email
 
-        if user.email == email:
+        if user_email == email:
             userinfo = usersinfo.query.filter_by(email=email).first()
             user_password = check_password_hash(userinfo.password,password)
 
