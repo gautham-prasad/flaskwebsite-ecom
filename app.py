@@ -129,7 +129,7 @@ def login():
         user = users.query.filter_by(email=request.json['email']).first()
 
         if user:
-            userinfo = usersinfo.query.filter_by(email=user_email.email).first()
+            userinfo = usersinfo.query.filter_by(email=user).first()
             user_password = check_password_hash(userinfo.password,request.json['password'])
 
             if user_password:
