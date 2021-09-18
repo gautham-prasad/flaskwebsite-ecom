@@ -77,7 +77,7 @@ def register():
 
     return jsonify({'msg': "redirect to register page"})
 
-@app.route("/verify/<token>", methods=['POST'])
+@app.route("/verify/<token>", methods=['GET'])
 def verify(token):
     try:
         email = serializer.loads(token)
