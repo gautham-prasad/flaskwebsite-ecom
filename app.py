@@ -37,7 +37,6 @@ def load_user(user_id):
     return users.query.filter_by(int(user_id)).first()
 
 
-
 @app.route("/register", methods=['GET', 'POST'])
 def register():
 
@@ -51,11 +50,24 @@ def register():
 
         if user_email:
             msg = 'Account exist for %s' % email 
-            return jsonify({'msg': msg})
+            return jsonify({'msg': msg}), 404
 
         elif user_name:
             msg = 'username taken!'
+            return jsonify({'msg': msg}), 404
+
+        elif not username or not password or not email:
+            msg = 'Please fill out the form!'
             return jsonify({'msg': msg}) 
+
+        elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
+            msg = 'Invalid email address!'
+            return jsonify({'msg': msg})
+
+        elif not re.match(r'[A-Za-z0-9]+', username):
+            msg = 'Username must contain only characters and numbers!'
+            return jsonify({'msg': msg})
+
         
         token = serializer.dumps(email)
         link = url_for('verify',token=token,_external=True)
