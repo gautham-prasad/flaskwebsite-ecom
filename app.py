@@ -123,21 +123,20 @@ def login():
         email = request.json['email']
         user = users.query.filter_by(email=email).first()
 
-        if user is None:
-            msg = 'Invalid email or password'
-            return jsonify({'msg': msg}), 401
-
-        elif email != user.email:
+        if user is None or email != user.email:
             msg = 'Invalid email or password'
             return jsonify({'msg': msg}), 401
         
         userinfo = usersinfo.query.filter_by(email=email).first()
         user_password = check_password_hash(userinfo.password,request.json['password'])
 
-        if user_password:
-            msg = 'Welcome back, %s' % user.username
+        if user_password is False:
+            msg = 'Invalid email or password'
             return jsonify({'msg': msg})
-
+        
+        msg = 'Welcome back, %s' % user.username
+        return jsonify({'msg': msg})
+        
     elif request.json == 'POST': 
         msg = 'Please fill out the form!'
         return jsonify({'msg': msg}), 401
