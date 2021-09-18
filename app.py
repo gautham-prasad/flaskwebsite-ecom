@@ -93,12 +93,12 @@ def verify(token):
         email = serializer.loads(token, max_age = 120)
         user_email = tempusers.query.filter_by(email= email).first()
     
-    except BadTimeSignature:
-        msg = 'Invalid token!'
-        return jsonify({'msg':msg}), 403
-
     except SignatureExpired:
         msg = 'Token expired!'
+        return jsonify({'msg':msg}), 403
+
+    except BadTimeSignature:
+        msg = 'Token invalid!'
         return jsonify({'msg':msg}), 403
 
     if email == user_email.email:
