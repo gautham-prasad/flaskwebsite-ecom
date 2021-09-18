@@ -56,10 +56,6 @@ def register():
             msg = 'username taken!'
             return jsonify({'msg': msg}), 401
 
-        elif not username or not password or not email:
-            msg = 'Please fill out the form!'
-            return jsonify({'msg': msg}), 401
-
         elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
             msg = 'Invalid email address!'
             return jsonify({'msg': msg}), 401
