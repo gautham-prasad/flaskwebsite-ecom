@@ -45,8 +45,8 @@ def register():
         username = request.json['username']
         password = generate_password_hash(request.json['password'], method='sha256')
 
-        user_email = tempusers.query.filter_by(email=email).first()
-        user_name = tempusers.query.filter_by(username=username).first()
+        user_email = users.query.filter_by(email=email).first()
+        user_name = users.query.filter_by(username=username).first()
 
         if user_email:
             msg = 'Account exist for %s' % email 
