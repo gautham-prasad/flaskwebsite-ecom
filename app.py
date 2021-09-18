@@ -81,8 +81,21 @@ def register():
 def verify(token):
     try:
         email = serializer.loads(token)
-        return jsonify({'msg': email})
+        user_email = tempusers.query.filter_by(email= email).first()
+        if email == user_email.email:
 
+            user = users(email = email, username =user_email.username)
+            db.session.add(user)
+            db.session.commit()
+
+            userinfo = usersinfo(email = email, password = user_email.password)
+            db.session.add(userinfo)
+            db.session.commit()
+
+            msg = 'Registration successful!'
+            return jsonify({'msg':msg, 'email': email})
+
+        return jsonify({'msg': "invalid_token"})
     except:
         return jsonify({'msg': "invalid token"})
 
