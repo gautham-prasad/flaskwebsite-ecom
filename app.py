@@ -93,11 +93,11 @@ def verify(token):
     
     if email == user_email.email:
 
-        user = users(email = email, username =user_email.username)
+        user = users(email = user_email.email, username =user_email.username)
         db.session.add(user)
         db.session.commit()
 
-        userinfo = usersinfo(email = email, password = user_email.password)
+        userinfo = usersinfo(email = user_email.email, password = user_email.password)
         db.session.add(userinfo)
         db.session.commit()
 
