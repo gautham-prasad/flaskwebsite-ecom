@@ -50,23 +50,23 @@ def register():
 
         if user_email:
             msg = 'Account exist for %s' % email 
-            return jsonify({'msg': msg}), 404
+            return jsonify({'msg': msg}), 401
 
         elif user_name:
             msg = 'username taken!'
-            return jsonify({'msg': msg}), 404
+            return jsonify({'msg': msg}), 401
 
         elif not username or not password or not email:
             msg = 'Please fill out the form!'
-            return jsonify({'msg': msg}) 
+            return jsonify({'msg': msg}), 401
 
         elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
             msg = 'Invalid email address!'
-            return jsonify({'msg': msg})
+            return jsonify({'msg': msg}), 401
 
         elif not re.match(r'[A-Za-z0-9]+', username):
             msg = 'Username must contain only characters and numbers!'
-            return jsonify({'msg': msg})
+            return jsonify({'msg': msg}), 401
 
         
         token = serializer.dumps(email)
@@ -81,13 +81,13 @@ def register():
         mail.send(msg)
 
         msg = "Please verify email to complete registration"
-        return jsonify({'msg': msg, 'username': username, 'email': email, 'password': password, 'token':token})
+        return jsonify({'msg': msg, 'username': username, 'email': email, 'password': password, 'token':token}), 200
 
     elif request.json == 'POST':
         msg = 'Please fill out the form!'
-        return jsonify({'msg': msg})
+        return jsonify({'msg': msg}), 401
 
-    return jsonify({'msg': "redirect to register page"})
+    return jsonify({'msg': "redirect to register page"}), 301
 
 @app.route("/verify/<token>", methods=['GET', 'POST'])
 def verify(token):
