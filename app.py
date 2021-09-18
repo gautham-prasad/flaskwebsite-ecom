@@ -1,4 +1,3 @@
-from _typeshed import NoneType
 import os, psycopg2
 import re
 from flask import Flask, jsonify, request, url_for
