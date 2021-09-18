@@ -116,7 +116,7 @@ def login():
 
         user = users.query.filter_by(email=email).first()
 
-        if email is not None:
+        if email is not None and email == user.email:
             userinfo = usersinfo.query.filter_by(email=email).first()
             user_password = check_password_hash(userinfo.password,password)
 
