@@ -1,12 +1,12 @@
-import os
-import psycopg2
+import os, psycopg2
+import re
 from flask import Flask, jsonify, request, url_for
 from flask_mail import Mail, Message
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user       
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import URLSafeTimedSerializer
-from itsdangerous.exc import BadTimeSignature, SignatureExpired
 from models import tempusers, users, usersinfo                             
 
 
@@ -28,6 +28,15 @@ app.config['MAIL_USE_SSL'] = True
 app.config['MAIL_USERNAME'] = sender_email
 app.config['MAIL_PASSWORD'] = os.environ.get('SENDER_PASSWORD')
 mail = Mail(app)
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return users.query.filter_by(int(user_id)).first()
+
+
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -70,31 +79,7 @@ def register():
 
 @app.route("/verify/<token>", methods=['GET','POST'])
 def verify(token):
-
-    email = serializer.loads(token)
-    tempuser = tempusers.query.filter_by(email=email).first()
-
-    try:
-        if tempuser.email == email:
-
-            user = users(email = email, username = tempuser.username)
-            db.session.add(user)
-            db.session.commit()
-
-            userinfo = usersinfo(email = email, password = tempuser.password)
-            db.session.add(userinfo)
-            db.session.commit()
-
-            msg = 'Congratulations, registration successful! Redirect to login page'
-            return jsonify({'msg': msg, 'email':email})
-
-    except BadTimeSignature:
-        msg = 'Inavlid token!'
-        return jsonify({'msg': msg, 'email':email})
-
-    except SignatureExpired:
-        msg = 'Token expired!'
-        return jsonify({'msg': msg, 'email':email})
+    pass
 
 @app.route("/", methods=['GET','POST'])
 def login():
@@ -103,10 +88,11 @@ def login():
         user_email = users.query.filter_by(email=request.json['email']).first()
 
         if user_email:
-            user_password = usersinfo.query.filter_by(id=user_email.id).first()
+            user_password = usersinfo.query.filter_by(email=user_email.email).first()
             user_password = check_password_hash(user_password.password,request.json['password'])
 
             if user_password:
+                login_user(user_email.username)
                 msg = 'Welcome back, %s' % user_email.username
                 return jsonify({'msg': msg})
 
@@ -121,6 +107,20 @@ def login():
         return jsonify({'msg': msg})
 
     msg = 'Redirect to login page'
+    return jsonify({'msg': msg})
+
+@app.route("/logout")
+@login_required
+def logout():
+
+    logout_user()
+    msg = 'logged out'
+    return jsonify({'msg': msg})
+
+@app.route("/dashboard")
+@login_required
+def dashboard():
+    msg = 'current user is, %s' %current_user.username 
     return jsonify({'msg': msg})
 
 if __name__ == '__main__':
