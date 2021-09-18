@@ -101,8 +101,7 @@ def verify(token):
 
     
 
-
-@app.route("/", methods=['GET','POST'])
+@app.route("/login", methods=['GET','POST'])
 def login():
 
     if request.method == 'POST' and 'email' in request.json and 'password' in request.json:
