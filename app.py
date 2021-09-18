@@ -90,17 +90,25 @@ def verify(token):
 
     email = serializer.loads(token, max_age = 120)
     user_email = tempusers.query.filter_by(email= email).first()
+    try:
+        if email == user_email.email:
+
+            user = users(email = user_email.email, username =user_email.username)
+            db.session.add(user)
+            db.session.commit()
+
+            userinfo = usersinfo(email = user_email.email, password = user_email.password)
+            db.session.add(userinfo)
+            db.session.commit()
+
+            msg = 'Registration successful!'
+            return jsonify({'msg':msg, 'email': email})
     
-    if email == user_email.email:
-
-        user = users(email = user_email.email, username =user_email.username)
-        db.session.add(user)
-        db.session.commit()
-
-        userinfo = usersinfo(email = user_email.email, password = user_email.password)
-        db.session.add(userinfo)
-        db.session.commit()
-
+    except BadTimeSignature:
+        msg = 'Registration successful!'
+        return jsonify({'msg':msg, 'email': email})
+        
+    except SignatureExpired:
         msg = 'Registration successful!'
         return jsonify({'msg':msg, 'email': email})
 
