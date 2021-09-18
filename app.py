@@ -89,7 +89,7 @@ def register():
 def verify(token):
     
     try:
-        email = serializer.loads(token, max_age = 120)
+        email = serializer.loads(token, max_age = 300)
         user_email = tempusers.query.filter_by(email= email).first()
     
     except SignatureExpired:
@@ -132,11 +132,11 @@ def login():
 
         if user_password is False:
             msg = 'Invalid email or password'
-            return jsonify({'msg': msg})
+            return jsonify({'msg': msg}), 401
         
         msg = 'Welcome back, %s' % user.username
         return jsonify({'msg': msg})
-        
+
     elif request.json == 'POST': 
         msg = 'Please fill out the form!'
         return jsonify({'msg': msg}), 401
