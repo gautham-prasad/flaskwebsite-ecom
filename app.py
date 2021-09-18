@@ -6,7 +6,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user       
 from werkzeug.security import generate_password_hash, check_password_hash
-from itsdangerous import URLSafeTimedSerializer, BadTimeSignature, SignatureExpired
+from itsdangerous import URLSafeTimedSerializer
+from itsdangerous.exc import BadTimeSignature, SignatureExpired
 from models import tempusers, users, usersinfo                             
 
 
@@ -107,7 +108,7 @@ def verify(token):
     except BadTimeSignature:
         msg = 'Registration successful!'
         return jsonify({'msg':msg, 'email': email})
-        
+
     except SignatureExpired:
         msg = 'Registration successful!'
         return jsonify({'msg':msg, 'email': email})
