@@ -126,15 +126,15 @@ def verify(token):
 def login():
 
     if request.method == 'POST' and 'email' in request.json and 'password' in request.json:
-        user_email = users.query.filter_by(email=request.json['email']).first()
+        user = users.query.filter_by(email=request.json['email']).first()
 
-        if user_email:
-            user_password = usersinfo.query.filter_by(email=user_email.email).first()
-            user_password = check_password_hash(user_password.password,request.json['password'])
+        if user:
+            userinfo = usersinfo.query.filter_by(email=user_email.email).first()
+            user_password = check_password_hash(userinfo.password,request.json['password'])
 
             if user_password:
-                login_user(user_email.username)
-                msg = 'Welcome back, %s' % user_email.username
+                login_user(user.username)
+                msg = 'Welcome back, %s' % user.username
                 return jsonify({'msg': msg}), 200
 
             msg = 'Invalid username or password'
