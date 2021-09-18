@@ -77,9 +77,17 @@ def register():
 
     return jsonify({'msg': "redirect to register page"})
 
-@app.route("/verify/<token>", methods=['GET','POST'])
+@app.route("/verify/<token>", methods=['POST'])
 def verify(token):
-    pass
+    try:
+        email = serializer.loads(token)
+        return jsonify({'msg': email})
+
+    except:
+        return jsonify({'msg': "invalid token"})
+
+    
+
 
 @app.route("/", methods=['GET','POST'])
 def login():
@@ -112,7 +120,6 @@ def login():
 @app.route("/logout")
 @login_required
 def logout():
-
     logout_user()
     msg = 'logged out'
     return jsonify({'msg': msg})
