@@ -125,7 +125,7 @@ def login():
 
         user = users.query.filter_by(email=email).first()
 
-        if email == user.email:
+        if user.email == email:
             userinfo = usersinfo.query.filter_by(email=email).first()
             user_password = check_password_hash(userinfo.password,password)
 
