@@ -95,7 +95,7 @@ def verify(token):
     
     except SignatureExpired:
         msg = 'Token expired!'
-        return jsonify({'msg':msg}), 403
+        return jsonify({'msg':msg}), 401
 
     except BadTimeSignature:
         msg = 'Token invalid!'
