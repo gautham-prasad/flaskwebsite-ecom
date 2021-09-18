@@ -125,7 +125,11 @@ def login():
 
         user = users.query.filter_by(email=email).first()
 
-        if user.email == email:
+        if email is None:
+            msg = 'Invalid email or password'
+            return jsonify({'msg': msg}), 401
+
+        elif user.email == email:
             userinfo = usersinfo.query.filter_by(email=email).first()
             user_password = check_password_hash(userinfo.password,password)
 
@@ -133,10 +137,6 @@ def login():
                 msg = 'Welcome back, %s' % user.username
                 return jsonify({'msg': msg})
 
-            msg = 'Invalid email or password'
-            return jsonify({'msg': msg}), 401
-
-        else:
             msg = 'Invalid email or password'
             return jsonify({'msg': msg}), 401
 
