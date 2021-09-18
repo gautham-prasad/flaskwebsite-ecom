@@ -117,7 +117,7 @@ def verify(token):
     except SignatureExpired:
         msg = 'Token expired!'
         return jsonify({'msg':msg})
-        
+
     except:
             return jsonify({'msg': "redirect to login page"})
     
@@ -135,20 +135,20 @@ def login():
             if user_password:
                 login_user(user_email.username)
                 msg = 'Welcome back, %s' % user_email.username
-                return jsonify({'msg': msg})
+                return jsonify({'msg': msg}), 200
 
             msg = 'Invalid username or password'
-            return jsonify({'msg': msg})
+            return jsonify({'msg': msg}), 401
 
         msg = 'Invalid username or password'
-        return jsonify({'msg': msg})
+        return jsonify({'msg': msg}), 401
 
     elif request.json == 'POST': 
         msg = 'Please fill out the form!'
-        return jsonify({'msg': msg})
+        return jsonify({'msg': msg}), 401
 
     msg = 'Redirect to login page'
-    return jsonify({'msg': msg})
+    return jsonify({'msg': msg}), 301
 
 @app.route("/logout")
 @login_required
