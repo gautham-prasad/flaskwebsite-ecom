@@ -88,10 +88,20 @@ def register():
 @app.route("/verify/<token>", methods=['GET'])
 def verify(token):
 
-    email = serializer.loads(token, max_age = 120)
-    user_email = tempusers.query.filter_by(email= email).first()
+    
     try:
-        if email == user_email.email:
+        email = serializer.loads(token, max_age = 120)
+        user_email = tempusers.query.filter_by(email= email).first()
+    
+    except BadTimeSignature:
+        msg = 'Invalid token!'
+        return jsonify({'msg':msg})
+
+    except SignatureExpired:
+        msg = 'Token expired!'
+        return jsonify({'msg':msg})
+
+    if email == user_email.email:
 
             user = users(email = user_email.email, username =user_email.username)
             db.session.add(user)
@@ -103,14 +113,6 @@ def verify(token):
 
             msg = 'Registration successful!'
             return jsonify({'msg':msg, 'email': email})
-    
-    except (BadTimeSignature):
-        msg = 'Registration successful!'
-        return jsonify({'msg':msg, 'email': email})
-
-    except (SignatureExpired):
-        msg = 'Registration successful!'
-        return jsonify({'msg':msg, 'email': email})
 
     return jsonify({'msg': "invalid_token"})
     
