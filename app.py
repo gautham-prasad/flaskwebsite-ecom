@@ -33,11 +33,11 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 @login_manager.user_loader
-def load_user(email):
-    return users.query.filter_by(email = email).first()
+def load_user(id):
+    return users.query.filter_by(id = id).first()
 
-def get_id(self):
-    return str.decode(self.email)
+# def get_id(self):
+#     return str.decode(self.email)
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
