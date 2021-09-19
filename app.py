@@ -50,13 +50,15 @@ def register():
 
         user = Users.query.filter_by(email=email).first()
 
-        if user.email == email:
-            msg = 'Account exist for %s' % email 
-            return jsonify({'msg': msg}), 401
+        if user is not None:
 
-        elif user.username == username:
-            msg = 'username taken!'
-            return jsonify({'msg': msg}), 401
+            if user.email == email:
+                msg = 'Account exist for %s' % email 
+                return jsonify({'msg': msg}), 401
+
+            elif user.username == username:
+                msg = 'username taken!'
+                return jsonify({'msg': msg}), 401
 
         elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
             msg = 'Invalid email address!'
@@ -72,7 +74,7 @@ def register():
         msg = Message('Verification link',sender=('Gautham','sender_email'),recipients=[email, sender_email])
         msg.body = 'Congratulations! Your link is {}'.format(link)
         
-        tempuser = Tempusers(email = email, username =username, password = password, verified = False)
+        tempuser = Tempusers(email = email, username =username, password = password)
         db.session.add(tempuser)
         db.session.commit()
 
