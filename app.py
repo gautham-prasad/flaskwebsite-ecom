@@ -106,8 +106,10 @@ def verify(token):
 
     if email == temp_user.email and temp_user.verified == False:
 
-            temp_user.verified = True
+            tempuser = Tempusers(verified = True)
+            db.session.add(tempuser)
             db.session.commit()
+
 
             user = Users(email = temp_user.email, username = temp_user.username, password = temp_user.password)
             db.session.add(user)
