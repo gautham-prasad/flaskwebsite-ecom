@@ -2,7 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 db = SQLAlchemy()
 
-class tempusers(UserMixin, db.Model):
+class Tempusers(UserMixin, db.Model):
 
         __tablename__ = "tempusers"
 
@@ -10,20 +10,15 @@ class tempusers(UserMixin, db.Model):
         email = db.Column(db.String(256), unique = True, nullable=False)
         username = db.Column(db.String(100), unique=True, nullable=False)
         password = db.Column(db.String(), nullable=False)
+        verified = db.Column(db.Boolean(), default=False)
 
-class users(UserMixin, db.Model):
+class Users(UserMixin, db.Model):
 
         __tablename__ = "users"
 
         id = db.Column(db.Integer, primary_key=True)
         email = db.Column(db.String(256), unique = True, nullable=False)
         username = db.Column(db.String(100), unique=True, nullable=False)
-
-class usersinfo(UserMixin, db.Model):
-
-        __tablename__ = "usersinfo"
-
-        id = db.Column(db.Integer, primary_key=True)
-        email = db.Column(db.String(256), unique = True, nullable=False)
         password = db.Column(db.String(), nullable=False)
+
 

@@ -49,14 +49,13 @@ def register():
         username = request.json['username']
         password = generate_password_hash(request.json['password'], method='sha256')
 
-        user_email = users.query.filter_by(email=email).first()
-        user_name = users.query.filter_by(username=username).first()
+        user = users.query.filter_by(email=email).first()
 
-        if user_email:
+        if user.email is not None:
             msg = 'Account exist for %s' % email 
             return jsonify({'msg': msg}), 401
 
-        elif user_name:
+        elif user.username is not None:
             msg = 'username taken!'
             return jsonify({'msg': msg}), 401
 
@@ -94,7 +93,7 @@ def verify(token):
     
     try:
         email = serializer.loads(token, max_age = 300)
-        user_email = tempusers.query.filter_by(email= email).first()
+        user = tempusers.query.filter_by(email= email).first()
     
     except SignatureExpired:
         msg = 'Token Timed Out!'
@@ -104,14 +103,10 @@ def verify(token):
         msg = 'Invalid Token!'
         return jsonify({'msg':msg}), 401
 
-    if email == user_email.email:
+    if email == user.email:
 
-            user = users(email = user_email.email, username =user_email.username)
+            user = users(email = user.email, username = user.username, password = user.password, verified = True)
             db.session.add(user)
-            db.session.commit()
-
-            userinfo = usersinfo(email = user_email.email, password = user_email.password)
-            db.session.add(userinfo)
             db.session.commit()
 
             msg = 'Registration successful!'
@@ -130,9 +125,8 @@ def login():
         if user is None or email != user.email:
             msg = 'Invalid email or password'
             return jsonify({'msg': msg}), 401
-        
-        userinfo = usersinfo.query.filter_by(email=email).first()
-        user_password = check_password_hash(userinfo.password,request.json['password'])
+    
+        user_password = check_password_hash(user.password,request.json['password'])
 
         if user_password is False:
             msg = 'Invalid email or password'
@@ -157,14 +151,14 @@ def logout():
     user = current_user.username
     logout_user()
     msg = 'logged out %s' % user
-    return jsonify({'msg': msg})
+    return jsonify({'msg': msg}), 200
 
 
 @app.route("/dashboard", methods=['GET'])
 @login_required
 def dashboard():
     msg = 'current user is, %s' %current_user.username 
-    return jsonify({'msg': msg})
+    return jsonify({'msg': msg}), 200
 
 if __name__ == '__main__':
     app.run()

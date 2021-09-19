@@ -2,18 +2,13 @@
 -- 	id serial primary key,
 -- 	email varchar(256) unique not null,
 -- 	username varchar(100) unique not null,
--- 	password text not null
+-- 	password text not null,
+-- 	verified boolean default false
 -- );
 
 -- create table if not exists users(
 -- 	id serial primary key,
 -- 	email varchar(256) unique not null,
--- 	username varchar(100) unique not null
--- );
-
--- create table if not exists usersinfo(
--- 	id serial primary key,
--- 	user_id integer,
--- 	password text not null,
--- 	foreign key user_id references users(id)
+-- 	username varchar(100) unique not null,
+-- 	password text not null
 -- );
