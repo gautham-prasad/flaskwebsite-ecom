@@ -102,7 +102,7 @@ def verify(token):
         msg = 'Invalid Token!'
         return jsonify({'msg':msg}), 401
 
-    if email == user.email:
+    if email == user.email and user.verified == False:
 
             tempuser = Tempusers(verified = True)
             db.session.add(tempuser)
