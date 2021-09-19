@@ -149,10 +149,15 @@ def login():
 @app.route("/logout", methods=["GET"])
 @login_required
 def logout():
-    user = current_user.username
-    logout_user()
-    msg = 'logged out %s' % user
-    return jsonify({'msg': msg})
+    try: 
+        user = current_user.username
+        logout_user()
+        msg = 'logged out %s' % user
+        return jsonify({'msg': msg})
+
+    except Exception:
+        msg = 'Logging to access this page'
+        return jsonify({'msg': msg})
 
 @app.route("/dashboard", methods=['GET'])
 @login_required
