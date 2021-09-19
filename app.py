@@ -50,11 +50,11 @@ def register():
 
         user = Users.query.filter_by(email=email).first()
 
-        if user.email is not None:
+        if user.email:
             msg = 'Account exist for %s' % email 
             return jsonify({'msg': msg}), 401
 
-        elif user.username is not None:
+        elif user.username:
             msg = 'username taken!'
             return jsonify({'msg': msg}), 401
 
