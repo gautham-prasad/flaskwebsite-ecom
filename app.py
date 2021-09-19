@@ -7,7 +7,7 @@ from flask_cors import CORS
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user       
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import URLSafeTimedSerializer, BadTimeSignature, SignatureExpired
-from models import tempusers, users, usersinfo                             
+from models import tempusers, users, usersinfo      
 
 
 app = Flask(__name__)
@@ -37,7 +37,7 @@ def load_user(email):
     return users.query.filter_by(email = email).first()
 
 def get_id(self):
-    return re.UNICODE(self.email)
+    return str.decode(self.email)
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
