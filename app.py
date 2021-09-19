@@ -92,7 +92,7 @@ def verify(token):
     
     try:
         email = serializer.loads(token, max_age = 300)
-        user = Tempusers.query.filter_by(email= email).first()
+        temp_user = Tempusers.query.filter_by(email= email).first()
     
     except SignatureExpired:
         msg = 'Token Timed Out!'
@@ -102,13 +102,12 @@ def verify(token):
         msg = 'Invalid Token!'
         return jsonify({'msg':msg}), 401
 
-    if email == user.email and user.verified == False:
+    if email == temp_user.email and temp_user.verified == False:
 
-            tempuser = Tempusers(verified = True)
-            db.session.add(tempuser)
+            temp_user.verified = True
             db.session.commit()
 
-            user = Users(email = user.email, username = user.username, password = user.password)
+            user = Users(email = temp_user.email, username = temp_user.username, password = temp_user.password)
             db.session.add(user)
             db.session.commit()
 
