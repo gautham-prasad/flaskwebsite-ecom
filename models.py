@@ -4,8 +4,6 @@ db = SQLAlchemy()
 
 class Tempusers(UserMixin, db.Model):
 
-        __tablename__ = "tempusers"
-
         id = db.Column(db.Integer, primary_key=True)
         email = db.Column(db.String(256), unique = True, nullable=False)
         username = db.Column(db.String(100), unique=True, nullable=False)
@@ -13,8 +11,6 @@ class Tempusers(UserMixin, db.Model):
         verified = db.Column(db.Boolean(), default=False)
 
 class Users(UserMixin, db.Model):
-
-        __tablename__ = "users"
 
         id = db.Column(db.Integer, primary_key=True)
         email = db.Column(db.String(256), unique = True, nullable=False)

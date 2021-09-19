@@ -7,8 +7,7 @@ from flask_cors import CORS
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user       
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import URLSafeTimedSerializer, BadTimeSignature, SignatureExpired
-from models import tempusers, users, usersinfo      
-
+from models import *
 
 app = Flask(__name__)
 CORS(app)
@@ -34,7 +33,7 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(id):
-    return users.query.filter_by(id = id).first()
+    return Users.query.filter_by(id = id).first()
 
 @app.login_manager.unauthorized_handler
 def unauth_handler():
@@ -49,7 +48,7 @@ def register():
         username = request.json['username']
         password = generate_password_hash(request.json['password'], method='sha256')
 
-        user = users.query.filter_by(email=email).first()
+        user = Users.query.filter_by(email=email).first()
 
         if user.email is not None:
             msg = 'Account exist for %s' % email 
@@ -73,7 +72,7 @@ def register():
         msg = Message('Verification link',sender=('Gautham','sender_email'),recipients=[email, sender_email])
         msg.body = 'Congratulations! Your link is {}'.format(link)
         
-        tempuser = tempusers(email = email, username =username, password = password)
+        tempuser = Tempusers(email = email, username =username, password = password)
         db.session.add(tempuser)
         db.session.commit()
 
@@ -93,7 +92,7 @@ def verify(token):
     
     try:
         email = serializer.loads(token, max_age = 300)
-        user = tempusers.query.filter_by(email= email).first()
+        user = Tempusers.query.filter_by(email= email).first()
     
     except SignatureExpired:
         msg = 'Token Timed Out!'
@@ -105,7 +104,7 @@ def verify(token):
 
     if email == user.email:
 
-            user = users(email = user.email, username = user.username, password = user.password, verified = True)
+            user = Users(email = user.email, username = user.username, password = user.password, verified = True)
             db.session.add(user)
             db.session.commit()
 
@@ -120,7 +119,7 @@ def login():
 
     if request.method == 'POST' and 'email' in request.json and 'password' in request.json:
         email = request.json['email']
-        user = users.query.filter_by(email=email).first()
+        user = Users.query.filter_by(email=email).first()
 
         if user is None or email != user.email:
             msg = 'Invalid email or password'
