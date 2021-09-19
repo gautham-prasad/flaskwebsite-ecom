@@ -36,7 +36,11 @@ login_manager.init_app(app)
 def load_user(id):
     return users.query.filter_by(id = id).first()
 
-
+@app.login_manager.unauthorized_handler
+def unauth_handler():
+    msg = 'login to access this page'
+    return jsonify({'msg': msg}), 401
+    
 @app.route("/register", methods=['GET', 'POST'])
 def register():
 
@@ -149,15 +153,12 @@ def login():
 @app.route("/logout", methods=["GET"])
 @login_required
 def logout():
-    try: 
-        user = current_user.username
-        logout_user()
-        msg = 'logged out %s' % user
-        return jsonify({'msg': msg})
+    
+    user = current_user.username
+    logout_user()
+    msg = 'logged out %s' % user
+    return jsonify({'msg': msg})
 
-    except Exception:
-        msg = 'Logging to access this page'
-        return jsonify({'msg': msg})
 
 @app.route("/dashboard", methods=['GET'])
 @login_required
