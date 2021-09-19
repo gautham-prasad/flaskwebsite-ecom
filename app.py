@@ -40,7 +40,7 @@ def load_user(id):
 def unauth_handler():
     msg = 'login to access this page'
     return jsonify({'msg': msg}), 401
-    
+
 @app.route("/register", methods=['GET', 'POST'])
 def register():
 
@@ -65,7 +65,7 @@ def register():
             return jsonify({'msg': msg}), 401
 
         elif not re.match(r'[A-Za-z0-9]+', username):
-            msg = 'Username must contain only characters and numbers!'
+            msg = 'Username must contain only alphabets and numbers!'
             return jsonify({'msg': msg}), 401
 
         
