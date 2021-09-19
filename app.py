@@ -37,7 +37,7 @@ def load_user(email):
     return users.query.filter_by(email = email).first()
 
 def get_id(self):
-    return (self.email)
+    return re.UNICODE(self.email)
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
