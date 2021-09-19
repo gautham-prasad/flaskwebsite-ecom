@@ -1,6 +1,6 @@
 import os, psycopg2
 import re
-from flask import Flask, jsonify, request, url_for, flash
+from flask import Flask, jsonify, request, url_for
 from flask_mail import Mail, Message
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
@@ -138,7 +138,6 @@ def login():
         
         login_user(user)
         print('Login successful')
-        flash ('success')
         msg = 'Welcome back, %s' % current_user.email
         return jsonify({'msg': msg})
 
@@ -152,8 +151,9 @@ def login():
 @app.route("/logout", methods=["GET"])
 @login_required
 def logout():
+    user = current_user
     logout_user()
-    msg = 'logged out'
+    msg = 'logged out %s' % user
     return jsonify({'msg': msg})
 
 @app.route("/dashboard", methods=['GET'])
