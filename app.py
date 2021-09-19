@@ -13,13 +13,13 @@ from models import tempusers, users, usersinfo
 app = Flask(__name__)
 CORS(app)
 
-app.config['SECRET_KEY'] = os.environ.get('SECRET')
-serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
-
 DATABASE_URL = os.environ.get('DATABASE_URI')
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 db = SQLAlchemy(app)
+
+app.config['SECRET_KEY'] = os.environ.get('SECRET')
+serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 sender_email = os.environ.get('SENDER_EMAIL')
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -33,9 +33,11 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 @login_manager.user_loader
-def load_user(user_id):
-    return users.query.filter_by(int(user_id)).first()
+def load_user(email):
+    return users.query.filter_by(email = email).first()
 
+def get_id(self):
+    return (self.email)
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -134,6 +136,7 @@ def login():
             msg = 'Invalid email or password'
             return jsonify({'msg': msg}), 401
         
+        login_user(email)
         msg = 'Welcome back, %s' % user.username
         return jsonify({'msg': msg})
 
