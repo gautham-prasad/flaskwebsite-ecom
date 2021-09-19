@@ -136,7 +136,7 @@ def login():
             msg = 'Invalid email or password'
             return jsonify({'msg': msg}), 401
         
-        login_user(email)
+        login_user(user)
         msg = 'Welcome back, %s' % user.username
         return jsonify({'msg': msg})
 
