@@ -137,7 +137,7 @@ def login():
             return jsonify({'msg': msg}), 401
         
         login_user(user)
-        msg = 'Welcome back, %s' % user.username
+        msg = 'Welcome back, %s' % current_user
         return jsonify({'msg': msg})
 
     elif request.json == 'POST': 
