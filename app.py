@@ -72,7 +72,7 @@ def register():
         msg = Message('Verification link',sender=('Gautham','sender_email'),recipients=[email, sender_email])
         msg.body = 'Congratulations! Your link is {}'.format(link)
         
-        tempuser = Tempusers(email = email, username =username, password = password)
+        tempuser = Tempusers(email = email, username =username, password = password, verified = False)
         db.session.add(tempuser)
         db.session.commit()
 
