@@ -149,7 +149,7 @@ def login():
 @app.route("/logout", methods=["GET"])
 @login_required
 def logout():
-    user = str(current_user)
+    user = current_user.username
     logout_user()
     msg = 'logged out %s' % user
     return jsonify({'msg': msg})
