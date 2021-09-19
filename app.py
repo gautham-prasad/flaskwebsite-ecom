@@ -104,7 +104,11 @@ def verify(token):
 
     if email == user.email:
 
-            user = Users(email = user.email, username = user.username, password = user.password, verified = True)
+            tempuser = Tempusers(verified = True)
+            db.session.add(tempuser)
+            db.session.commit()
+
+            user = Users(email = user.email, username = user.username, password = user.password)
             db.session.add(user)
             db.session.commit()
 
