@@ -36,8 +36,6 @@ login_manager.init_app(app)
 def load_user(id):
     return users.query.filter_by(id = id).first()
 
-# def get_id(self):
-#     return str.decode(self.email)
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -151,7 +149,7 @@ def login():
 @app.route("/logout", methods=["GET"])
 @login_required
 def logout():
-    user = current_user
+    user = str(current_user)
     logout_user()
     msg = 'logged out %s' % user
     return jsonify({'msg': msg})
