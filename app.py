@@ -1,6 +1,6 @@
 import os, psycopg2
 import re
-from flask import Flask, jsonify, request, url_for
+from flask import Flask, jsonify, request, url_for, flash
 from flask_mail import Mail, Message
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
@@ -137,6 +137,8 @@ def login():
             return jsonify({'msg': msg}), 401
         
         login_user(user)
+        print('Login successful')
+        flash ('success')
         msg = 'Welcome back, %s' % current_user.email
         return jsonify({'msg': msg})
 
