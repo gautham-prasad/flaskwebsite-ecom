@@ -147,14 +147,14 @@ def login():
     msg = 'Redirect to login page'
     return jsonify({'msg': msg}), 302
 
-@app.route("/logout")
+@app.route("/logout", methods=["GET"])
 @login_required
 def logout():
     logout_user()
     msg = 'logged out'
     return jsonify({'msg': msg})
 
-@app.route("/dashboard")
+@app.route("/dashboard", methods=['GET'])
 @login_required
 def dashboard():
     msg = 'current user is, %s' %current_user.username 
