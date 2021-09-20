@@ -15,7 +15,7 @@ CORS(app)
 DATABASE_URL = os.environ.get('DATABASE_URI')
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-db = SQLAlchemy(app)
+db.init_app(app)
 
 app.config['SECRET_KEY'] = os.environ.get('SECRET')
 serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
@@ -121,8 +121,6 @@ def verify(token):
     msg = 'Your account is verified, login to continue'
     return jsonify({'msg':msg}), 401
 
-    
-
 @app.route("/login", methods=['GET','POST'])
 def login():
 
@@ -161,10 +159,9 @@ def logout():
     msg = 'logged out %s' % user
     return jsonify({'msg': msg}), 200
 
-
 @app.route("/home", methods=['GET'])
 @login_required
-def dashboard():
+def home():
     msg = 'current user is, %s' %current_user.username 
     return jsonify({'msg': msg}), 200
 
