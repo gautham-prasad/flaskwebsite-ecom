@@ -104,10 +104,12 @@ def verify(token):
         msg = 'Invalid Token!'
         return jsonify({'msg':msg}), 401
 
-    if email == temp_user.email and temp_user.verified == False:
+    if temp_user.verified == False:
 
-            temp_user.verified = True
-            db.session.commit()
+        temp_user.verified = True
+        db.session.commit()
+
+        if email == temp_user.email:
 
             user = Users(email = temp_user.email, username = temp_user.username, password = temp_user.password)
             db.session.add(user)
@@ -115,6 +117,10 @@ def verify(token):
 
             msg = 'Registration successful!'
             return jsonify({'msg':msg, 'email': email, 'redirect':'registration page'})
+
+        msg = 'Your account is verified, login to continue'
+        return jsonify({'msg':'registration page'})
+
 
     return jsonify({'msg': "redirect to registration page "}), 302
     
