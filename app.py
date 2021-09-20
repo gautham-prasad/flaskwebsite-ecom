@@ -119,7 +119,7 @@ def verify(token):
             return jsonify({'msg':msg, 'email': email, 'redirect':'registration page'})
 
         msg = 'Your account is verified, login to continue'
-        return jsonify({'msg':'registration page'})
+        return jsonify({'msg':'registration page'}), 401
 
 
     return jsonify({'msg': "redirect to registration page "}), 302
