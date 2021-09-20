@@ -118,11 +118,9 @@ def verify(token):
             msg = 'Registration successful!'
             return jsonify({'msg':msg, 'email': email, 'redirect':'registration page'})
 
-        msg = 'Your account is verified, login to continue'
-        return jsonify({'msg':'registration page'}), 401
+    msg = 'Your account is verified, login to continue'
+    return jsonify({'msg':'registration page'}), 401
 
-
-    return jsonify({'msg': "redirect to registration page "}), 302
     
 
 @app.route("/login", methods=['GET','POST'])
