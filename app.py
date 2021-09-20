@@ -162,7 +162,7 @@ def logout():
     return jsonify({'msg': msg}), 200
 
 
-@app.route("/dashboard", methods=['GET'])
+@app.route("/home", methods=['GET'])
 @login_required
 def dashboard():
     msg = 'current user is, %s' %current_user.username 
