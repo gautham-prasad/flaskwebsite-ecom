@@ -119,7 +119,7 @@ def verify(token):
             return jsonify({'msg':msg, 'email': email, 'redirect':'registration page'})
 
     msg = 'Your account is verified, login to continue'
-    return jsonify({'msg':msg}), 401
+    return jsonify({'msg':msg})
 
 @app.route("/login", methods=['GET','POST'])
 def login():
